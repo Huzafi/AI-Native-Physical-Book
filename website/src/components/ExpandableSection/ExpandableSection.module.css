@@ -1,0 +1,56 @@
+.expandableSection {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: left;
+}
+
+.header:hover {
+  background-color: #e9ecef;
+}
+
+.title {
+  font-size: 1.1rem;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.content {
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.contentInner {
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0.75rem;
+  }
+
+  .contentInner {
+    padding: 0.75rem;
+  }
+}

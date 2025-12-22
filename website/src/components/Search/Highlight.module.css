@@ -1,0 +1,16 @@
+.highlightContainer {
+  /* Default container styles if needed */
+}
+
+.highlighted {
+  background-color: #fff9c4; /* Light yellow background */
+  padding: 0 0.1em;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+/* Dark mode support */
+html[data-theme='dark'] .highlighted {
+  background-color: #d7ccc8; /* Light brown for dark mode */
+  color: #000;
+}

@@ -1,0 +1,30 @@
+.contentPageWrapper {
+  width: 100%;
+}
+
+.contentPageMain {
+  padding: 2rem 0;
+  max-width: 100%;
+}
+
+.contentContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 1400px) {
+  .contentContainer {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentPageMain {
+    padding: 1rem 0;
+  }
+
+  .contentContainer {
+    padding: 0 0.5rem;
+  }
+}

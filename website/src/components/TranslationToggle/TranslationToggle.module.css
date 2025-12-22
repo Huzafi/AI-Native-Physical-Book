@@ -1,0 +1,71 @@
+.translationContainer {
+  margin: 1rem 0;
+}
+
+.translationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.loadingIndicator {
+  font-size: 0.875rem;
+  color: var(--ifm-color-info);
+  padding: 0.25rem 0.5rem;
+  background: var(--ifm-color-info-background);
+  border-radius: 4px;
+}
+
+.errorIndicator {
+  font-size: 0.875rem;
+  color: var(--ifm-color-danger);
+  padding: 0.25rem 0.5rem;
+  background: var(--ifm-color-danger-background);
+  border-radius: 4px;
+}
+
+.fallbackIndicator {
+  font-size: 0.875rem;
+  color: var(--ifm-color-warning);
+  padding: 0.25rem 0.5rem;
+  background: var(--ifm-color-warning-background);
+  border-radius: 4px;
+}
+
+.translationContent {
+  /* Default LTR content */
+}
+
+.translationContent.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Specific styling for RTL content */
+.translationContent.rtl h1,
+.translationContent.rtl h2,
+.translationContent.rtl h3,
+.translationContent.rtl h4,
+.translationContent.rtl h5,
+.translationContent.rtl h6 {
+  text-align: right;
+}
+
+.translationContent.rtl p,
+.translationContent.rtl div,
+.translationContent.rtl span {
+  text-align: right;
+}
+
+.translationContent.rtl ul,
+.translationContent.rtl ol {
+  text-align: right;
+  direction: rtl;
+}
+
+.translationContent.rtl li {
+  text-align: right;
+}

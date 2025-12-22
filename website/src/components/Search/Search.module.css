@@ -1,0 +1,383 @@
+.searchContainer {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.searchForm {
+  width: 100%;
+}
+
+.searchInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.loadingSpinner {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #4285f4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 0.25rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.resultsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.resultItem {
+  border-bottom: 1px solid #eee;
+}
+
+.resultItem:last-child {
+  border-bottom: none;
+}
+
+.resultLink {
+  display: block;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.resultLink:hover {
+  background-color: #f8f9fa;
+}
+
+.resultTitle {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a0dab;
+}
+
+.resultPreview {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.875rem;
+  color: #5f6368;
+  line-height: 1.4;
+}
+
+.resultPath {
+  font-size: 0.75rem;
+  color: #70757a;
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.25rem;
+}
+
+.relevanceScore {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+  padding: 0.125rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+.resultTags {
+  margin-top: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #f1f3f4;
+  color: #5f6368;
+  padding: 0.125rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.suggestionsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 0.25rem;
+}
+
+.suggestionsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.suggestionItem {
+  border-bottom: 1px solid #eee;
+}
+
+.suggestionItem:last-child {
+  border-bottom: none;
+}
+
+.suggestionButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #5f6368;
+  transition: background-color 0.2s;
+}
+
+.suggestionButton:hover {
+  background-color: #f8f9fa;
+  color: #1a0dab;
+}
+
+.noResults {
+  padding: 1rem;
+  text-align: center;
+  color: #70757a;
+  font-style: italic;
+}
+
+.error {
+  padding: 1rem;
+  color: #d93025;
+  background-color: #fce8e6;
+  border-radius: 4px;
+  margin: 0.5rem;
+}
+
+.pagination {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.paginationInfo {
+  font-size: 0.875rem;
+  color: #5f6368;
+  white-space: nowrap;
+}
+
+.paginationControls {
+  display: flex;
+  gap: 0.25rem;
+  align-self: flex-end;
+}
+
+.paginationButton {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #5f6368;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  min-width: 44px;
+  text-align: center;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #c6c6c6;
+}
+
+.paginationButton.active {
+  background-color: #4285f4;
+  color: white;
+  border-color: #4285f4;
+}
+
+.paginationButton.disabled {
+  color: #a0a0a0;
+  cursor: not-allowed;
+  background-color: #f8f9fa;
+}
+
+.pageNumber {
+  min-width: 36px;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .paginationControls {
+    justify-content: center;
+  }
+}
+
+.searchHistory {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 0.25rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.875rem;
+  color: #5f6368;
+  font-weight: 500;
+}
+
+.clearHistoryButton {
+  background: none;
+  border: none;
+  color: #d93025;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.clearHistoryButton:hover {
+  background-color: #fce8e6;
+}
+
+.historyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.historyItem {
+  border-bottom: 1px solid #eee;
+}
+
+.historyItem:last-child {
+  border-bottom: none;
+}
+
+.historyButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #5f6368;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.historyButton:hover {
+  background-color: #f8f9fa;
+  color: #1a0dab;
+}
+
+.historyIcon {
+  font-size: 1rem;
+}
+
+.historyQuery {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .searchContainer {
+    max-width: 100%;
+  }
+
+  .searchInput {
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+  }
+
+  .searchResults {
+    position: fixed;
+    top: 60px;
+    left: 1rem;
+    right: 1rem;
+    max-height: calc(100vh - 70px);
+  }
+
+  .searchHistory {
+    position: fixed;
+    top: 60px;
+    left: 1rem;
+    right: 1rem;
+    max-height: calc(100vh - 70px);
+  }
+}

@@ -1,55 +1,39 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# AI-Native Book on Physical & AI Humanoids Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Book-First
+The project prioritizes creating a book-like reading experience over building a platform. All features must enhance the book-like nature of the experience, not turn it into a dashboard or tool. The reader should feel like they are reading a real book, not interacting with a generator or SaaS application.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Reader-Centric
+All development decisions must prioritize the reader's experience of exploring ideas over data input or configuration. The reader never fills forms, signs up, or configures options. The book should be readable end-to-end without interruption, with interactions that feel optional and lightweight.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### AI-Native Content
+Content must be presented from an AI perspective, showing perception → reasoning → action loops, comparing human intelligence vs machine intelligence, and presenting futures where AI and humans coexist. This does not mean auto-generation but explaining systems from an AI perspective.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Docusaurus-First
+The project uses Docusaurus as the primary technology stack for frontend development. All frontend functionality must be implemented using Docusaurus capabilities, with content in Markdown/MDX format, and small reusable React components inside MDX files.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Minimal Interactivity
+All interactive elements must be lightweight and never interrupt the reading flow. Interactions should be optional (expandable explanations, visual diagrams, reflection prompts) that enhance rather than disrupt the reading experience. The book should be fully readable without clicking anything.
 
-### [PRINCIPLE_6_NAME]
+### Static-First Architecture
+The project prioritizes static content delivery with minimal backend intelligence. Any optional backend functionality must remain invisible to the reader and not affect the core book reading experience. Performance and simplicity take precedence over dynamic features.
 
+## Technology Constraints
 
-[PRINCIPLE__DESCRIPTION]
+Frontend: Docusaurus only
+Content: Markdown / MDX
+Components: Small reusable React components inside MDX
+Backend (optional): Minimal, invisible to reader
+All code must follow the project's performance standards: page load < 3 seconds on low-end devices, no heavy client-side computation, no unnecessary JavaScript.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## UI/Design Standards
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+The UI must follow book-like design principles: centered layout with readable width, soft and calm color palette, minimal animations (scroll, expand, fade only), and mobile-first reading experience. Chapter design must be short, clear, concept-focused, using simple language with real-world analogies, including optional expandable sections, at least one visual or conceptual diagram, and avoiding long code blocks or heavy technical depth.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. All features must answer: "Does this enhance the reading experience?" All PRs and reviews must verify compliance with book-first principles. Any new feature that moves the project toward a platform or generator rather than a book requires explicit constitutional amendment. All changes must be small, testable, and reference code precisely.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-15 | **Last Amended**: 2025-12-15
