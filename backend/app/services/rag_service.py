@@ -1,200 +1,124 @@
-from typing import List, Dict, Any, Optional
-from app.services.vector_db import vector_db_service
-from app.services.search_service import search_service
-from app.services.content_service import content_service
-from sqlalchemy.orm import Session
 import logging
-import uuid
-from qdrant_client.http import models
-from sentence_transformers import SentenceTransformer
-import numpy as np
+from typing import List, Dict, Any, Optional
+import cohere
+from qdrant_client import QdrantClient
+from src.config.qdrant_config import QDRANT_URL, QDRANT_API_KEY, QDRANT_COLLECTION_NAME
+from src.config.cohere_config import settings as cohere_settings
 
 logger = logging.getLogger(__name__)
 
 class RAGService:
     def __init__(self):
-        # Initialize sentence transformer model for embeddings
-        # In a real implementation, you might use OpenAI embeddings or another service
+        self.qdrant_client = QdrantClient(
+            url=QDRANT_URL,
+            api_key=QDRANT_API_KEY
+        )
+        self.cohere_client = cohere.Client(api_key=cohere_settings.cohere_api_key)
+        self.collection_name = QDRANT_COLLECTION_NAME
+
+    async def search_and_generate(self, query: str) -> Dict[str, Any]:
+        """
+        Search Qdrant for relevant documents and generate a response using Cohere
+        """
         try:
-            self.encoder = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight model for embeddings
-        except Exception as e:
-            logger.warning(f"Could not initialize sentence transformer: {e}")
-            self.encoder = None
+            from qdrant_client.http import models
+            from src.config.cohere_config import generate_embeddings
 
-    def generate_embeddings(self, text: str) -> List[float]:
-        """Generate embeddings for text using sentence transformer."""
-        if self.encoder:
-            embedding = self.encoder.encode([text])
-            return embedding[0].tolist()  # Convert to list for JSON serialization
-        else:
-            # Fallback: return a zero vector of appropriate size
-            return [0.0] * 384  # Size of all-MiniLM-L6-v2 embeddings
-
-    def index_content_for_rag(self, db: Session, content_id: str, content_text: str, metadata: Dict[str, Any] = None) -> bool:
-        """Index content for RAG using vector database."""
-        try:
-            # Chunk the content into smaller pieces for better retrieval
-            chunks = self._chunk_content(content_text)
-
-            points = []
-            for i, chunk in enumerate(chunks):
-                # Generate embedding for the chunk
-                embedding = self.generate_embeddings(chunk)
-
-                # Create a unique ID for this chunk
-                chunk_id = f"{content_id}_chunk_{i}"
-
-                # Create a Qdrant point
-                point = models.PointStruct(
-                    id=chunk_id,
-                    vector=embedding,
-                    payload={
-                        "content_id": content_id,
-                        "chunk_text": chunk,
-                        "chunk_index": i,
-                        "metadata": metadata or {}
-                    }
-                )
-                points.append(point)
-
-            # Upsert points to vector database
-            vector_db_service.upsert_vectors(points)
-            logger.info(f"Indexed {len(chunks)} chunks for content {content_id}")
-            return True
-        except Exception as e:
-            logger.error(f"Error indexing content {content_id} for RAG: {str(e)}")
-            return False
-
-    def _chunk_content(self, text: str, chunk_size: int = 512, overlap: int = 50) -> List[str]:
-        """Chunk content into smaller pieces."""
-        if len(text) <= chunk_size:
-            return [text]
-
-        chunks = []
-        start = 0
-
-        while start < len(text):
-            end = start + chunk_size
-
-            # If we're not at the end, try to break at sentence boundary
-            if end < len(text):
-                # Look for sentence endings near the end
-                sentence_end = max(text.rfind('.', start, end),
-                                 text.rfind('!', start, end),
-                                 text.rfind('?', start, end))
-
-                if sentence_end > start + chunk_size // 2:  # Only break if it's not too early
-                    end = sentence_end + 1
-                else:
-                    # If no sentence end found, break at word boundary
-                    word_end = text.rfind(' ', start + chunk_size // 2, end)
-                    if word_end > start:
-                        end = word_end
-
-            chunks.append(text[start:end].strip())
-            start = end - overlap if end < len(text) else end
-
-            # Ensure we're making progress
-            if start == end:
-                start += chunk_size
-
-        return [chunk for chunk in chunks if chunk]  # Filter out empty chunks
-
-    def retrieve_context(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
-        """Retrieve relevant context for a query using vector search."""
-        try:
             # Generate embedding for the query
-            query_embedding = self.generate_embeddings(query)
+            query_embeddings = generate_embeddings([query])
+            query_vector = query_embeddings[0] if query_embeddings else []
 
-            # Search in vector database
-            results = vector_db_service.search_vectors(query_embedding, limit=limit)
-
-            # Format results
-            contexts = []
-            for result in results:
-                contexts.append({
-                    "content_id": result.payload.get("content_id"),
-                    "chunk_text": result.payload.get("chunk_text"),
-                    "relevance_score": result.score,  # Cosine similarity score
-                    "metadata": result.payload.get("metadata", {})
-                })
-
-            return contexts
-        except Exception as e:
-            logger.error(f"Error retrieving context for query '{query}': {str(e)}")
-            return []
-
-    def generate_answer(self, query: str, contexts: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Generate an answer based on query and retrieved contexts."""
-        try:
-            # Combine contexts into a single context string
-            context_text = "\n\n".join([ctx["chunk_text"] for ctx in contexts])
-
-            # In a real implementation, you would use an LLM like OpenAI GPT to generate the answer
-            # For this implementation, we'll create a simple response based on the context
-
-            # Simple answer generation (in real implementation, use an LLM)
-            answer = self._simple_answer_generation(query, context_text)
-
-            # Calculate confidence based on context relevance
-            avg_relevance = np.mean([ctx["relevance_score"] for ctx in contexts]) if contexts else 0.0
-
-            return {
-                "answer": answer,
-                "sources": [
-                    {
-                        "content_id": ctx["content_id"],
-                        "title": ctx["metadata"].get("title", "Unknown Title"),
-                        "url_path": ctx["metadata"].get("url_path", ""),
-                        "relevance_score": ctx["relevance_score"]
-                    }
-                    for ctx in contexts
-                ],
-                "confidence": float(avg_relevance)
-            }
-        except Exception as e:
-            logger.error(f"Error generating answer for query '{query}': {str(e)}")
-            return {
-                "answer": "Sorry, I couldn't generate an answer for your question.",
-                "sources": [],
-                "confidence": 0.0
-            }
-
-    def _simple_answer_generation(self, query: str, context: str) -> str:
-        """Simple answer generation (placeholder for actual LLM)."""
-        # This is a placeholder implementation
-        # In a real implementation, you would use an LLM like OpenAI's API
-        return f"Based on the provided context, here's an answer to your question '{query}': The context contains relevant information that addresses your query. For more details, please refer to the provided sources."
-
-    def answer_question(self, db: Session, question: str, context_content_id: Optional[str] = None) -> Dict[str, Any]:
-        """Answer a question using RAG approach."""
-        try:
-            # Retrieve relevant context
-            contexts = self.retrieve_context(question)
-
-            # If specific content ID is provided, filter contexts to that content
-            if context_content_id:
-                contexts = [ctx for ctx in contexts if ctx["content_id"] == context_content_id]
-
-            # If no contexts found, provide a graceful fallback
-            if not contexts:
+            if not query_vector:
+                logger.warning("Could not generate embedding for query")
                 return {
-                    "answer": "I couldn't find relevant information in the book to answer your question. Please try rephrasing your question or check other sections of the book.",
-                    "sources": [],
-                    "confidence": 0.1  # Low confidence when no context found
+                    "answer": "Could not process your query due to embedding generation issue.",
+                    "results": []
                 }
 
-            # Generate answer based on contexts
-            result = self.generate_answer(question, contexts)
+            # Search in Qdrant using the vector with the new API
+            search_results = self.qdrant_client.query_points(
+                collection_name=self.collection_name,
+                query=query_vector,
+                limit=5,  # Get top 5 most relevant results
+                with_payload=True,
+            )
 
-            return result
-        except Exception as e:
-            logger.error(f"Error answering question '{question}': {str(e)}")
+            # Extract content from search results
+            contexts = []
+            results_metadata = []
+
+            for result in search_results:
+                if result.payload:
+                    content = result.payload.get('text', '') or result.payload.get('content', '')
+                    metadata = {
+                        'id': result.id,
+                        'score': result.score,
+                        'payload': result.payload
+                    }
+                    contexts.append(content)
+                    results_metadata.append(metadata)
+
+            # Prepare context for Cohere
+            context_text = "\n\n".join(contexts) if contexts else "No relevant context found in the book."
+
+            # Generate response using Cohere
+            if contexts:
+                prompt = f"""
+                Based on the following context from the book, please answer the question.
+                If the context doesn't contain enough information to answer the question, please say so.
+
+                Context:
+                {context_text}
+
+                Question: {query}
+
+                Answer:
+                """
+            else:
+                prompt = f"""
+                The system couldn't find any relevant information in the book to answer the question: {query}
+                Please acknowledge that you couldn't find relevant information in the provided book content.
+                """
+
+            response = self.cohere_client.generate(
+                model='command-r-plus',  # Using a powerful model for better responses
+                prompt=prompt,
+                max_tokens=500,
+                temperature=0.7,
+                stop_sequences=["\n\n"]
+            )
+
+            generated_text = response.generations[0].text.strip()
+
             return {
-                "answer": "Sorry, I'm having trouble answering your question right now. The AI service may be temporarily unavailable. Please try again later.",
-                "sources": [],
-                "confidence": 0.0
+                "answer": generated_text,
+                "results": results_metadata
             }
 
-# Create a global instance
-rag_service = RAGService()
+        except Exception as e:
+            logger.error(f"Error in search_and_generate: {str(e)}")
+            # Return a structured error response instead of raising the exception
+            return {
+                "answer": f"An error occurred while processing your query: {str(e)}",
+                "results": []
+            }
+
+    async def health_check(self) -> bool:
+        """
+        Check if Qdrant and Cohere services are accessible
+        """
+        try:
+            # Test Qdrant connection
+            self.qdrant_client.get_collection(self.collection_name)
+
+            # Test Cohere connection by making a simple request
+            self.cohere_client.generate(
+                model='command-r-plus',
+                prompt="Say 'health check successful'",
+                max_tokens=10
+            )
+
+            return True
+        except Exception as e:
+            logger.error(f"Health check failed: {str(e)}")
+            return False
