@@ -11,7 +11,15 @@
       "Bash(curl -s -o nul -w \"%{http_code}\" \"http://localhost:3000/docs/chapter-2/human-robot-interaction\")",
       "Bash(curl -s \"http://localhost:3000/docs\")",
       "Bash(npx docusaurus start --port 3000 --host 0.0.0.0)",
-      "Bash(git add .specify/memory/constitution.md CLAUDE.md .claude/ .dockerignore .github/ .gitignore IMPLEMENTATION_SUMMARY.md README.md backend/ deployment/ docker-compose.yml docs/ history/ shared-config.js specs/ test_*.py website/)"
+      "Bash(git add .specify/memory/constitution.md CLAUDE.md .claude/ .dockerignore .github/ .gitignore IMPLEMENTATION_SUMMARY.md README.md backend/ deployment/ docker-compose.yml docs/ history/ shared-config.js specs/ test_*.py website/)",
+      "Bash(git push -u origin master)",
+      "Bash(gh pr create --title \"feat: complete AI-Native Physical Book implementation\" --body \"## Summary\n\nThis PR implements the complete AI-Native Physical Book project with the following features:\n\n- Full-stack Docusaurus-based book website with backend API\n- AI assistant functionality with RAG service for book content\n- Comprehensive book content with 4 chapters on AI and robotics\n- Search, translation, and interactive features\n- Docker deployment configurations\n- Comprehensive documentation and testing\n\n## Files Changed\n\n- 147 files added/modified\n- Complete backend implementation with FastAPI\n- Docusaurus frontend with AI components\n- Book content in MDX format\n- Deployment configurations\n\n## Testing\n\n- Backend tests included\n- Frontend components tested\n- CI/CD pipeline configured\" --base master)",
+      "Bash(python -m pip install -r requirements.txt)",
+      "Bash(python -m alembic upgrade head)",
+      "Bash(pip install pydantic-settings==2.6.1)",
+      "Bash(pip install -r requirements-pydantic2.txt)",
+      "Bash(pip install -r requirements-pydantic2.txt --force-reinstall)",
+      "Bash(powershell \"Get-ChildItem -Path ''G:\\\\Hackathon_claude\\\\Hackathon-AI-Book\\\\backend'' -Recurse -Name | Where-Object { $_-match ''main|app|server|application'' }\")"
     ]
   }
 }

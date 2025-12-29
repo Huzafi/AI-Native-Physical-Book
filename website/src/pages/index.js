@@ -32,9 +32,9 @@ function HomepageHeader() {
               </Link>
               <Link
                 className="button button--secondary button--lg"
-                to="/docs"
+                to="/docs/intro"
               >
-                Explore the Book
+                Explore the Book 
               </Link>
             </div>
           </div>

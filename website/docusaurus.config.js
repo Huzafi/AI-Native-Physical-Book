@@ -8,12 +8,12 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'AI-Native Book',
+  title: 'Physical-AI & Humanoids Book 📘',
   tagline: 'A book-first reading experience with AI assistance',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-ai-book-site.example.com',
+  url: 'https://ai-native-book-green.vercel.app/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -43,7 +43,7 @@ const config = {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/Hackathon_claude/Hackathon-AI-Book/tree/main/website/',
+          editUrl: 'https://github.com/Huzafi/AI-Native-Physical-Book/tree/001-ai-book-docusaurus/website',
           showLastUpdateAuthor: false,
           showLastUpdateTime: false,
         },
@@ -68,7 +68,7 @@ const config = {
         },
         items: [
           {type: 'docSidebar', sidebarId: 'tutorialSidebar', position: 'left', label: 'Book'},
-          {href: 'https://github.com/Hackathon_claude/Hackathon-AI-Book', label: 'GitHub', position: 'right'},
+          {href: 'https://github.com/Huzafi/AI-Native-Physical-Book/tree/001-ai-book-docusaurus', label: 'GitHub', position: 'right'},
           {type: 'search', position: 'right', className: 'header-search'},
           {href: '#', label: 'Sign In', position: 'right', className: 'header-signin'},
           {href: '#', label: 'Sign Up', position: 'right', className: 'header-signup'},
@@ -82,44 +82,6 @@ const config = {
       },
       footer: {
         style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Introduction',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/Hackathon_claude/Hackathon-AI-Book',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} AI-Native Book. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
