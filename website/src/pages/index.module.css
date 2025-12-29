@@ -1,0 +1,411 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+ .heroBanner {
+  padding: 6rem 0;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+  border-bottom: 1px solid #2a2a2a;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 4rem 0;
+  }
+}
+
+.heroBanner .hero__title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.heroBanner .hero__subtitle {
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.7;
+  margin-bottom: 0;
+  color: #d0d0d0;
+  padding: 0 1rem;
+}
+
+.heroContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.heroText {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.heroImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 300px;
+}
+
+.bookCover {
+  position: relative;
+  width: 220px;
+  height: 300px;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+.bookCover:hover {
+  transform: rotateY(-8deg) rotateX(2deg);
+}
+
+.bookSpine {
+  position: absolute;
+  width: 22px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: linear-gradient(
+    180deg,
+    #0f2027,
+    #203a43,
+    #2c5364
+  );
+  border-radius: 6px 0 0 6px;
+  box-shadow:
+    inset -2px 0 6px rgba(255,255,255,0.1),
+    -6px 0 20px rgba(0,0,0,0.6);
+}
+
+.bookCoverFront {
+  position: absolute;
+  left: 22px;
+  width: calc(100% - 22px);
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    #121c2d 0%,
+    #1f2f46 50%,
+    #243b55 100%
+  );
+  border-radius: 0 10px 10px 0;
+  padding: 2rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translateZ(1px);
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.55),
+    inset 0 1px 1px rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.bookCoverFront::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(255,255,255,0.08),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.bookTitle {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.25;
+  margin-bottom: 0.8rem;
+}
+
+.bookAuthor {
+  font-size: 0.95rem;
+  color: #f39c12;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+
+@media screen and (max-width: 996px) {
+  .heroContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 2.5rem;
+    padding: 0 1rem;
+  }
+
+  .heroText {
+    max-width: 100%;
+    align-items: center;
+  }
+
+  .heroImage {
+    min-width: auto;
+  }
+
+  .bookCover {
+    width: 150px;
+    height: 210px;
+  }
+
+  .bookSpine {
+    width: 15px;
+  }
+
+  .bookCoverFront {
+    left: 15px;
+    width: 135px;
+  }
+
+  .bookTitle {
+    font-size: 1.1rem;
+  }
+
+  .bookAuthor {
+    font-size: 0.8rem;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
+}
+
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.buttons .button {
+  font-size: 1.1rem;
+  padding: 0.9rem 1.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.buttons .button--primary {
+  background-color: #f39c12;
+  border-color: #f39c12;
+  color: white;
+  box-shadow: 0 4px 6px rgba(243, 156, 18, 0.2);
+}
+
+.buttons .button--primary:hover {
+  background-color: #e08a0f;
+  border-color: #e08a0f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(243, 156, 18, 0.3);
+}
+
+.buttons .button--secondary {
+  background-color: transparent;
+  border: 2px solid #444;
+  color: #d0d0d0;
+}
+
+.buttons .button--secondary:hover {
+  background-color: #2a2a2a;
+  border-color: #666;
+  color: white;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  padding: 5rem 0;
+  width: 100%;
+  gap: 3rem;
+}
+
+.features .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.features .col {
+  flex: 1 1 300px; /* Make columns responsive with min-width */
+  display: flex;
+  align-items: stretch;
+}
+
+.features .padding-horiz--md {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.features .padding-horiz--md h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  margin-top: 0;
+}
+
+.features .padding-horiz--md p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #b0b0b0;
+  margin-bottom: 0;
+}
+
+.featureCard {
+  background: rgba(40, 40, 40, 0.6);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid #333;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  border-color: #f39c12;
+  background: rgba(50, 50, 50, 0.7);
+}
+
+.featureIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(243, 156, 18, 0.1);
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 200px;
+}
+
+.bookPreview {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+  border-top: 1px solid #2a2a2a;
+  border-bottom: 1px solid #2a2a2a;
+  margin: 3rem 0;
+}
+
+.previewHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.previewTitle {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.previewSubtitle {
+  font-size: 1.2rem;
+  color: #b0b0b0;
+  margin-bottom: 0;
+}
+
+.previewContent {
+  background: #0a0a0a;
+  border-radius: 12px;
+  padding: 2.5rem;
+  border: 1px solid #333;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.previewPage {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 2rem;
+  border-left: 4px solid #f39c12;
+  position: relative;
+}
+
+.previewPage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f39c12, transparent);
+}
+
+.previewChapter {
+  font-size: 1.4rem;
+  color: #f39c12;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.previewText {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #d0d0d0;
+  margin-bottom: 1.5rem;
+}
+
+.previewHighlight {
+  background: rgba(243, 156, 18, 0.1);
+  border-left: 3px solid #f39c12;
+  padding: 1rem 1.5rem;
+  border-radius: 0 4px 4px 0;
+  font-size: 1rem;
+  color: #e0e0e0;
+}
+
+@media screen and (max-width: 996px) {
+  .bookPreview {
+    padding: 3rem 0;
+  }
+
+  .previewContent {
+    padding: 1.5rem;
+  }
+
+  .previewPage {
+    padding: 1.5rem;
+  }
+}

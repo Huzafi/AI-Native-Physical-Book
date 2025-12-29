@@ -1,0 +1,104 @@
+.languageSelector {
+  position: relative;
+  display: inline-block;
+}
+
+.selectorButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--ifm-color-emphasis-200, #f0f0f0);
+  border: 1px solid var(--ifm-color-emphasis-300, #d0d0d0);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ifm-font-color-base);
+  transition: all var(--ifm-transition-fast) ease;
+}
+
+.selectorButton:hover {
+  background: var(--ifm-color-emphasis-300, #e0e0e0);
+}
+
+.selectedLanguage {
+  font-weight: 500;
+}
+
+.arrow {
+  font-size: 10px;
+  transition: transform var(--ifm-transition-fast) ease;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  min-width: 160px;
+  background: white;
+  border: 1px solid var(--ifm-color-emphasis-300, #d0d0d0);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+}
+
+.languageList {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.languageItem {
+  margin: 0;
+  padding: 0;
+}
+
+.languageButton {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ifm-font-color-base);
+  transition: background-color var(--ifm-transition-fast) ease;
+}
+
+.languageButton:hover {
+  background-color: var(--ifm-color-emphasis-100, #f5f5f5);
+}
+
+.languageButton.active {
+  background-color: var(--ifm-color-primary-lightest, #e6f0ff);
+  color: var(--ifm-color-primary-darker, #005a9e);
+  font-weight: 500;
+}
+
+/* RTL support for Urdu */
+.languageButton[dir="rtl"] {
+  text-align: right;
+}
+
+/* RTL dropdown positioning */
+[dir="rtl"] .dropdown {
+  right: auto;
+  left: 0;
+}
+
+/* General RTL support for the component */
+html[dir="rtl"] .languageSelector,
+.languageSelector[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] .selectorButton,
+.languageSelector[dir="rtl"] .selectorButton {
+  direction: rtl;
+}

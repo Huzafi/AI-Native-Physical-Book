@@ -1,0 +1,711 @@
+/**
+ * Custom CSS for AI-Native Book
+ * Contains styles for premium AI-Native aesthetic
+ */
+
+/* Modern font stack */
+html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Adjust body font size for better readability */
+body {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+/* Custom styles for main content area - full width layout */
+.main-wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+/* Book-like headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Chapter heading style */
+h1 {
+  font-size: 2.5rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.7rem;
+  margin-bottom: 2.5rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Section heading style */
+h2 {
+  font-size: 1.8rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1.8rem;
+}
+
+/* Subsection heading style */
+h3 {
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Book-like paragraph spacing */
+p {
+  margin-bottom: 1.4rem;
+  text-align: justify;
+}
+
+/* Reading time display */
+.reading-time {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Enhanced paragraph styling for book chapters */
+.markdown > p {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+}
+
+/* Custom blockquote styling */
+blockquote {
+  border-left: 4px solid #3b82f6;
+  margin: 2rem 0;
+  padding: 1rem 0 1rem 1.8rem;
+  background-color: #f8f9fa;
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Code block styling */
+pre, code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+/* Enhanced code block styling */
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 1px solid #eaecef;
+}
+
+/* Improved list styling */
+ul, ol {
+  margin: 1.2rem 0;
+  padding-left: 2rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+ul li {
+  list-style-type: disc;
+}
+
+ol li {
+  list-style-type: decimal;
+}
+
+/* Enhanced emphasis and strong styling */
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+/* Chapter landing page enhancements - full width */
+.docItemContainer .markdown {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Book chapter intro styling */
+.docItemContainer .markdown > h1:first-child + p,
+.docItemContainer .markdown > h1:first-child + div + p {
+  font-size: 1.2rem;
+  font-style: italic;
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Responsive design adjustments - maintain full width with appropriate padding */
+@media (min-width: 1400px) {
+  .main-wrapper {
+    max-width: 100%;
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 996px) {
+  .main-wrapper {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  body {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  .main-wrapper {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 15px;
+  }
+
+  .main-wrapper {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Navigation improvements for book structure */
+.pagination-nav {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Card-based sidebar styling */
+.sidebar {
+  font-size: 0.9rem;
+}
+
+/* Sidebar category cards */
+.menu__list-item {
+  margin-bottom: 8px;
+}
+
+.menu__list-item-collapsible {
+  background-color: #2d2d2d;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.menu__list-item:not(.menu__list-item-collapsible) {
+  background-color: #2d2d2d;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active sidebar item styling with dot indicator */
+.menu__link--active {
+  background-color: #3d3d3d !important;
+  border-left: 3px solid #3b82f6 !important;
+  position: relative;
+  padding-left: 12px;
+}
+
+.menu__link--active::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+}
+
+.menu__link {
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 2px 0;
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background-color: #3d3d3d;
+}
+
+/* Table of contents styling - only "On this page" navigation */
+.table-of-contents {
+  font-size: 0.9rem;
+}
+
+.table-of-contents__left-border {
+  border-left: none;
+}
+
+.table-of-contents li {
+  margin-bottom: 0.5rem;
+}
+
+.table-of-contents a {
+  transition: color 0.2s ease;
+}
+
+.table-of-contents a:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Hide "In This Chapter" footer */
+.theme-doc-toc-mobile .menu__list-item:last-child {
+  display: none;
+}
+
+/* Footer specific styles */
+html[data-theme='dark'] .footer {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%) !important;
+  border-top: 1px solid rgba(80, 80, 80, 0.3) !important;
+}
+
+html[data-theme='light'] .footer {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f0f0f0 100%) !important;
+  color: #333 !important;
+  border-top: 1px solid rgba(200, 200, 200, 0.5) !important;
+}
+
+/* Improved link styling */
+a {
+  text-decoration: none;
+  color: #3b82f6;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Custom container for book elements */
+.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Header/Navbar styling */
+.header-signup {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.header-signup:hover {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+.header-signin {
+  background-color: transparent !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #444 !important;
+  padding: 8px 16px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  margin-right: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.header-signin:hover {
+  background-color: #333 !important;
+  border-color: #666 !important;
+  color: white !important;
+}
+
+/* Search bar styling */
+.header-search {
+  margin-right: 8px;
+}
+
+.DocSearch-Button {
+  border: 1px solid #444 !important;
+  background-color: #222 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.DocSearch-Button:hover {
+  border-color: #666 !important;
+  background-color: #333 !important;
+}
+
+.DocSearch-Button-Placeholder {
+  color: #aaa !important;
+  font-size: 0.9rem !important;
+}
+
+.DocSearch-Button-Key {
+  background: #333 !important;
+  color: #aaa !important;
+  border-color: #555 !important;
+}
+
+/* Hide right panel (TOC) completely */
+@media (min-width: 997px) {
+  .col--3 {
+    display: none;
+  }
+  .col--9 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Adjust main content to use full width when TOC is hidden */
+@media (min-width: 997px) {
+  .docMainContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocPage-Layout-Main-styles-module {
+    max-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
+  }
+
+  /* Ensure markdown content also expands */
+  .markdown {
+    max-width: 100%;
+  }
+}
+
+/* Additional container adjustments for full width content */
+.docItemContainer {
+  max-width: 100%;
+}
+
+@media (min-width: 997px) {
+  .docItemContainer {
+    max-width: 100%;
+  }
+}
+
+/* Light mode adjustments */
+html[data-theme='light'] {
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #2563eb;
+  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary-darkest: #1e40af;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #dbeafe;
+
+  /* Ensure high contrast text colors in light mode */
+  --ifm-color-content: #222222;
+  --ifm-color-content-secondary: #555555;
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #ffffff;
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-footer-background-color: #f8f9fa;
+}
+
+html[data-theme='light'] {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='light'] h1,
+html[data-theme='light'] h2,
+html[data-theme='light'] h3,
+html[data-theme='light'] h4,
+html[data-theme='light'] h5,
+html[data-theme='light'] h6 {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='light'] body {
+  color: var(--ifm-color-content);
+  background-color: var(--ifm-background-color);
+}
+
+html[data-theme='light'] .markdown {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='light'] p {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='light'] a {
+  color: var(--ifm-color-primary);
+}
+
+html[data-theme='light'] a:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+html[data-theme='light'] h1 {
+  border-bottom-color: #e0e0e0;
+}
+
+html[data-theme='light'] blockquote {
+  background-color: #f8f9fa;
+  color: var(--ifm-color-content);
+  border-left-color: var(--ifm-color-primary);
+}
+
+html[data-theme='light'] code {
+  background-color: #f8f9fa;
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='light'] pre {
+  background-color: #f8f9fa;
+  border-color: #eaecef;
+}
+
+html[data-theme='light'] .pagination-nav {
+  border-top-color: #e0e0e0;
+}
+
+/* Light mode sidebar card styling */
+html[data-theme='light'] .menu__list-item-collapsible {
+  background-color: #f8f9fa;
+}
+
+html[data-theme='light'] .menu__list-item:not(.menu__list-item-collapsible) {
+  background-color: #f8f9fa;
+}
+
+html[data-theme='light'] .menu__link--active {
+  background-color: #e9ecef !important;
+}
+
+html[data-theme='light'] .menu__link {
+  color: #222222;
+}
+
+html[data-theme='light'] .menu__link:hover {
+  background-color: #e9ecef;
+}
+
+html[data-theme='light'] .table-of-contents a {
+  color: #555555;
+}
+
+html[data-theme='light'] .table-of-contents a:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Dark mode adjustments - obsidian background */
+html[data-theme='dark'] {
+  --ifm-color-primary: #3b82f6;
+  --ifm-color-primary-dark: #2563eb;
+  --ifm-color-primary-darker: #1d4ed8;
+  --ifm-color-primary-darkest: #1e40af;
+  --ifm-color-primary-light: #60a5fa;
+  --ifm-color-primary-lighter: #93c5fd;
+  --ifm-color-primary-lightest: #dbeafe;
+
+  /* Ensure high contrast text colors */
+  --ifm-color-content: #ffffff;
+  --ifm-color-content-secondary: #d0d0d0;
+  --ifm-background-color: #0d0d0d;
+  --ifm-background-surface-color: #1a1a1a;
+  --ifm-navbar-background-color: #0d0d0d;
+  --ifm-footer-background-color: #0d0d0d;
+}
+
+html[data-theme='dark'] {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] h4,
+html[data-theme='dark'] h5,
+html[data-theme='dark'] h6 {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='dark'] body {
+  color: var(--ifm-color-content);
+  background-color: var(--ifm-background-color);
+}
+
+html[data-theme='dark'] .markdown {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='dark'] p {
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='dark'] a {
+  color: var(--ifm-color-primary-light);
+}
+
+html[data-theme='dark'] a:hover {
+  color: var(--ifm-color-primary-lighter);
+}
+
+html[data-theme='dark'] h1 {
+  border-bottom-color: #444;
+}
+
+html[data-theme='dark'] blockquote {
+  background-color: #222;
+  color: var(--ifm-color-content-secondary);
+  border-left-color: var(--ifm-color-primary);
+}
+
+html[data-theme='dark'] code {
+  background-color: #222;
+  color: var(--ifm-color-content);
+}
+
+html[data-theme='dark'] pre {
+  background-color: #222;
+  border-color: #333;
+}
+
+html[data-theme='dark'] .pagination-nav {
+  border-top-color: #333;
+}
+
+/* Dark mode sidebar card styling */
+html[data-theme='dark'] .menu__list-item-collapsible {
+  background-color: #222;
+}
+
+html[data-theme='dark'] .menu__list-item:not(.menu__list-item-collapsible) {
+  background-color: #222;
+}
+
+html[data-theme='dark'] .menu__link--active {
+  background-color: #2d2d2d !important;
+}
+
+html[data-theme='dark'] .menu__link {
+  color: #e0e0e0;
+}
+
+html[data-theme='dark'] .menu__link:hover {
+  background-color: #2d2d2d;
+}
+
+html[data-theme='dark'] .table-of-contents a {
+  color: #aaa;
+}
+
+html[data-theme='dark'] .table-of-contents a:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Fix text readability in light containers when in dark mode */
+html[data-theme='dark'] .aiAssistantPanel,
+html[data-theme='dark'] .aiAssistantPanel .panelHeader,
+html[data-theme='dark'] .aiAssistantPanel .questionForm,
+html[data-theme='dark'] blockquote,
+html[data-theme='dark'] code,
+html[data-theme='dark'] pre,
+html[data-theme='dark'] .menu__list-item-collapsible,
+html[data-theme='dark'] .menu__list-item:not(.menu__list-item-collapsible) {
+  color: var(--ifm-color-content) !important;
+}
+
+/* Ensure light containers have readable text in dark mode */
+html[data-theme='dark'] .aiAssistantPanel,
+html[data-theme='dark'] .aiAssistantPanel .questionForm {
+  background-color: var(--ifm-background-surface-color) !important;
+  color: var(--ifm-color-content) !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .panelHeader {
+  background-color: var(--ifm-background-color) !important;
+  border-bottom-color: #444 !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .panelTitle,
+html[data-theme='dark'] .aiAssistantPanel .closeButton {
+  color: var(--ifm-color-content) !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .closeButton:hover {
+  background-color: #444 !important;
+  color: var(--ifm-color-content) !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .questionInput {
+  background-color: var(--ifm-background-color) !important;
+  border-color: #444 !important;
+  color: var(--ifm-color-content) !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .questionInput:focus {
+  border-color: var(--ifm-color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2) !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .questionMessage {
+  background-color: #333 !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .answerMessage {
+  background-color: #2a2a2a !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .error {
+  background-color: #4a2323 !important;
+  color: #f8d7da !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .sources a {
+  color: var(--ifm-color-primary-light) !important;
+}
+
+html[data-theme='dark'] .aiAssistantPanel .sources a:hover {
+  color: var(--ifm-color-primary-lighter) !important;
+}

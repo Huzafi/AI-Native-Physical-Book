@@ -1,0 +1,83 @@
+.callout {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-left: 4px solid #ddd;
+  border-radius: 0 4px 4px 0;
+  background-color: #f8f9fa;
+}
+
+.calloutHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.calloutIcon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.calloutTitle {
+  font-size: 1rem;
+}
+
+.calloutContent {
+  padding-top: 0.25rem;
+}
+
+/* Note callout */
+.calloutNote {
+  border-left-color: #39a1ff;
+  background-color: #f0f8ff;
+}
+
+.calloutNote .calloutHeader {
+  color: #0066cc;
+}
+
+/* Tip callout */
+.calloutTip {
+  border-left-color: #4caf50;
+  background-color: #f1f8e9;
+}
+
+.calloutTip .calloutHeader {
+  color: #2e7d32;
+}
+
+/* Caution callout */
+.calloutCaution {
+  border-left-color: #ff9800;
+  background-color: #fff3e0;
+}
+
+.calloutCaution .calloutHeader {
+  color: #ef6c00;
+}
+
+/* Danger callout */
+.calloutDanger {
+  border-left-color: #f44336;
+  background-color: #ffebee;
+}
+
+.calloutDanger .calloutHeader {
+  color: #c62828;
+}
+
+/* Success callout */
+.calloutSuccess {
+  border-left-color: #4caf50;
+  background-color: #e8f5e9;
+}
+
+.calloutSuccess .calloutHeader {
+  color: #2e7d32;
+}
+
+@media (max-width: 768px) {
+  .callout {
+    padding: 0.75rem;
+  }
+}
