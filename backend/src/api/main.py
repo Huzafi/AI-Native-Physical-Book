@@ -30,8 +30,7 @@ app.add_middleware(
 # Include API routers
 # Include our new RAG query router which handles the /query endpoint with Qdrant and Cohere
 app.include_router(rag_query_router, prefix="/api/v1", tags=["query"])
-app.include_router(query_router.router, prefix="/api/v1", tags=["query"])
-# Note: frontend_query_router is excluded since rag_query_router handles the same endpoint with better implementation
+# Note: query_router and frontend_query_router are excluded since rag_query_router handles the same endpoint with better implementation
 app.include_router(health_router.router, prefix="/api/v1", tags=["health"])
 app.include_router(book_router.router, prefix="/api/v1", tags=["books"])
 
@@ -44,3 +43,5 @@ async def root():
 @app.get("/metrics")
 async def get_metrics():
     return get_prometheus_metrics()
+
+    

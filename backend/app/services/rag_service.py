@@ -24,6 +24,13 @@ class RAGService:
             from qdrant_client.http import models
             from src.config.cohere_config import generate_embeddings
 
+            # Check if this is a general book query (summary, overview, about, etc.)
+            query_lower = query.lower().strip()
+            is_general_book_query = any(
+                keyword in query_lower
+                for keyword in ['summary', 'overview', 'introduction', 'about this book', 'about the book', 'book summary', 'what is this book about', 'book overview']
+            )
+
             # Generate embedding for the query
             query_embeddings = generate_embeddings([query])
             query_vector = query_embeddings[0] if query_embeddings else []
@@ -36,24 +43,44 @@ class RAGService:
                 }
 
             # Search in Qdrant using the vector with the new API
-            search_results = self.qdrant_client.query_points(
+            # For general book queries, get more results to provide a comprehensive view
+            limit = 10 if is_general_book_query else 5
+            search_response = self.qdrant_client.query_points(
                 collection_name=self.collection_name,
                 query=query_vector,
-                limit=5,  # Get top 5 most relevant results
+                limit=limit,
                 with_payload=True,
             )
 
-            # Extract content from search results
+            # Extract content from search results - the response is a named tuple-like object
             contexts = []
             results_metadata = []
 
+            # Handle the response format properly
+            # The response has a 'points' attribute containing the search results
+            if hasattr(search_response, 'points'):
+                search_results = search_response.points
+            else:
+                # Fallback if the response format is different
+                search_results = search_response
+
             for result in search_results:
-                if result.payload:
-                    content = result.payload.get('text', '') or result.payload.get('content', '')
+                # Handle both new and old API response formats
+                if hasattr(result, 'payload'):
+                    payload = result.payload
+                elif isinstance(result, dict) and 'payload' in result:
+                    payload = result['payload']
+                elif hasattr(result, '_payload'):
+                    payload = result._payload
+                else:
+                    continue  # Skip if we can't extract payload
+
+                if payload:
+                    content = payload.get('text', '') or payload.get('content', '')
                     metadata = {
-                        'id': result.id,
-                        'score': result.score,
-                        'payload': result.payload
+                        'id': result.id if hasattr(result, 'id') else getattr(result, 'payload', {}).get('id', 'unknown'),
+                        'score': result.score if hasattr(result, 'score') else getattr(result, 'score', 0),
+                        'payload': payload
                     }
                     contexts.append(content)
                     results_metadata.append(metadata)
@@ -61,34 +88,46 @@ class RAGService:
             # Prepare context for Cohere
             context_text = "\n\n".join(contexts) if contexts else "No relevant context found in the book."
 
-            # Generate response using Cohere
+            # Generate response using Cohere Chat API
             if contexts:
-                prompt = f"""
-                Based on the following context from the book, please answer the question.
-                If the context doesn't contain enough information to answer the question, please say so.
+                if is_general_book_query:
+                    # For general book queries, ask the model to provide a comprehensive summary or overview
+                    message = f"""
+                    Based on the following content from the book, please provide a comprehensive summary or overview of the book.
+                    Focus on the main topics, themes, and key points covered in the book.
 
-                Context:
-                {context_text}
+                    Book Content:
+                    {context_text}
 
-                Question: {query}
+                    Please provide a summary of the book based on the above content.
+                    """
+                else:
+                    # For specific queries, use the standard approach
+                    message = f"""
+                    Based on the following context from the book, please answer the question.
+                    If the context doesn't contain enough information to answer the question, please say so.
 
-                Answer:
-                """
+                    Context:
+                    {context_text}
+
+                    Question: {query}
+
+                    Answer:
+                    """
             else:
-                prompt = f"""
+                message = f"""
                 The system couldn't find any relevant information in the book to answer the question: {query}
                 Please acknowledge that you couldn't find relevant information in the provided book content.
                 """
 
-            response = self.cohere_client.generate(
-                model='command-r-plus',  # Using a powerful model for better responses
-                prompt=prompt,
-                max_tokens=500,
-                temperature=0.7,
-                stop_sequences=["\n\n"]
+            response = self.cohere_client.chat(
+                model='command-r-08-2024',  # Using a specific version of command-r
+                message=message,
+                max_tokens=1000,  # Increase token limit for book summaries
+                temperature=0.7
             )
 
-            generated_text = response.generations[0].text.strip()
+            generated_text = response.text.strip()
 
             return {
                 "answer": generated_text,
@@ -112,9 +151,9 @@ class RAGService:
             self.qdrant_client.get_collection(self.collection_name)
 
             # Test Cohere connection by making a simple request
-            self.cohere_client.generate(
-                model='command-r-plus',
-                prompt="Say 'health check successful'",
+            self.cohere_client.chat(
+                model='command-r-08-2024',
+                message="Say 'health check successful'",
                 max_tokens=10
             )
 
