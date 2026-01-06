@@ -3,24 +3,32 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+
+from sqlalchemy import select
+
 from src.services.rag_service import rag_service
 from src.services.query_service import query_service
 from src.utils.error_handler import handle_exception
-from src.utils.security import SecureQueryRequest, SecureSelectionQueryRequest, SecurityUtils
+from src.utils.security import (
+    SecureQueryRequest,
+    SecureSelectionQueryRequest,
+)
 from src.models.query import QueryBase, QueryType
-from src.models.database import get_async_session
+from src.models.database import get_db
 from src.models import BookContent as BookContentModel
 
 # Create router instance
 router = APIRouter()
 
-# Request/Response models
+
+# -------------------------
+# Response Models
+# -------------------------
 class Citation(BaseModel):
     section_title: str
     page_number: int
     text_snippet: str
+
 
 class QueryResponse(BaseModel):
     id: str
@@ -30,43 +38,47 @@ class QueryResponse(BaseModel):
     confidence_score: float
     query_type: str
 
-# Full book query endpoint - now changed to a different path to avoid conflicts with frontend endpoint
+
+# -------------------------
+# Full Book Query Endpoint
+# -------------------------
 @router.post("/query/full", response_model=QueryResponse)
-async def query_full_book(
+def query_full_book(
     request: SecureQueryRequest,
-    db: AsyncSession = Depends(get_async_session)
+    db=Depends(get_db),
 ):
     try:
-        # Get the specified book from the database
-        result = await db.execute(
-            select(BookContentModel).filter(BookContentModel.id == request.book_id)
+        # Fetch book from DB
+        result = db.execute(
+            select(BookContentModel).where(
+                BookContentModel.id == request.book_id
+            )
         )
         book = result.scalars().first()
 
         if not book:
-            # If the specified book is not available, return a default response
             return QueryResponse(
                 id="",
                 query=request.query,
                 response="The specified book is not available in the database.",
                 citations=[],
                 confidence_score=0.0,
-                query_type=QueryType.FULL_BOOK.value
+                query_type=QueryType.FULL_BOOK.value,
             )
 
-        # Process the query using the RAG service
+        # RAG processing
         rag_result = rag_service.query_full_book(
             query_text=request.query,
             book_id=request.book_id,
-            include_citations=request.include_citations
+            include_citations=request.include_citations,
         )
 
-        # Store the query in the database using QueryService
+        # Save query
         query_record = QueryBase(
             query=request.query,
             response=rag_result["response"],
             query_type=QueryType.FULL_BOOK,
-            book_id=request.book_id
+            book_id=request.book_id,
         )
         query_service.create_query(query_record)
 
@@ -76,35 +88,42 @@ async def query_full_book(
             response=rag_result["response"],
             citations=rag_result["citations"],
             confidence_score=rag_result["confidence_score"],
-            query_type=rag_result["query_type"]
+            query_type=rag_result["query_type"],
         )
+
     except HTTPException:
-        # Re-raise HTTP exceptions to be handled by FastAPI
         raise
     except Exception as e:
-        # Handle all other exceptions with our custom error handler
-        return handle_exception(e, {"endpoint": "/api/v1/query/full", "method": "POST", "request": request.dict()})
+        return handle_exception(
+            e,
+            {
+                "endpoint": "/api/v1/query/full",
+                "method": "POST",
+                "request": request.dict(),
+            },
+        )
 
-# User selection query endpoint
+
+# -------------------------
+# User Selection Query
+# -------------------------
 @router.post("/query/selection", response_model=QueryResponse)
-async def query_selection(
+def query_selection(
     request: SecureSelectionQueryRequest,
-    db: AsyncSession = Depends(get_async_session)
+    db=Depends(get_db),
 ):
     try:
-        # Process the query using the RAG service
         rag_result = rag_service.query_user_selection(
             query_text=request.query,
             selected_text=request.selected_text,
-            include_citations=request.include_citations
+            include_citations=request.include_citations,
         )
 
-        # Store the query in the database using QueryService
         query_record = QueryBase(
             query=request.query,
             response=rag_result["response"],
             query_type=QueryType.SELECTION,
-            book_id=None  # No specific book for selection queries
+            book_id=None,
         )
         query_service.create_query(query_record)
 
@@ -114,11 +133,17 @@ async def query_selection(
             response=rag_result["response"],
             citations=rag_result["citations"],
             confidence_score=rag_result["confidence_score"],
-            query_type=rag_result["query_type"]
+            query_type=rag_result["query_type"],
         )
+
     except HTTPException:
-        # Re-raise HTTP exceptions to be handled by FastAPI
         raise
     except Exception as e:
-        # Handle all other exceptions with our custom error handler
-        return handle_exception(e, {"endpoint": "/api/v1/query/selection", "method": "POST", "request": request.dict()})
+        return handle_exception(
+            e,
+            {
+                "endpoint": "/api/v1/query/selection",
+                "method": "POST",
+                "request": request.dict(),
+            },
+        )

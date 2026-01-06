@@ -15,11 +15,21 @@ class EmbeddingService:
     """Service for generating and storing embeddings."""
     
     def __init__(self):
-        self.qdrant_client = QdrantClient(
-            url=QDRANT_URL,
-            api_key=QDRANT_API_KEY,
-        )
-        self.collection_name = QDRANT_COLLECTION_NAME
+        try:
+            self.qdrant_client = QdrantClient(
+                url=QDRANT_URL,
+                api_key=QDRANT_API_KEY,
+            )
+            # Test the connection
+            self.qdrant_client.get_collections()
+            self.collection_name = QDRANT_COLLECTION_NAME
+            self.is_connected = True
+            logger.info(f"Successfully connected to Qdrant at {QDRANT_URL}")
+        except Exception as e:
+            logger.warning(f"Could not connect to Qdrant at {QDRANT_URL}: {str(e)}. Running in offline mode.")
+            self.qdrant_client = None
+            self.collection_name = QDRANT_COLLECTION_NAME
+            self.is_connected = False
     
     def generate_embeddings(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts."""
@@ -34,9 +44,14 @@ class EmbeddingService:
     def store_embeddings(self, texts: List[str], metadata: List[Dict[str, Any]] = None) -> List[str]:
         """Store embeddings in Qdrant and return the IDs."""
         try:
+            if not self.is_connected:
+                logger.warning("Qdrant is not connected. Skipping embedding storage.")
+                # Return empty list or mock IDs when not connected
+                return [str(uuid.uuid4()) for _ in texts]
+
             # Generate embeddings
             embeddings = self.generate_embeddings(texts)
-            
+
             # Create collection if it doesn't exist
             try:
                 self.qdrant_client.get_collection(self.collection_name)
@@ -45,23 +60,23 @@ class EmbeddingService:
                     collection_name=self.collection_name,
                     vectors_config=models.VectorParams(size=len(embeddings[0]) if embeddings else 384, distance=models.Distance.COSINE),
                 )
-            
+
             # Prepare points for upsert
             points = []
             ids = []
             for i, (text, embedding) in enumerate(zip(texts, embeddings)):
                 point_id = str(uuid.uuid4())
                 ids.append(point_id)
-                
+
                 payload = {
                     "text": text,
                     "created_at": str("datetime.utcnow()")  # Using string representation
                 }
-                
+
                 # Add additional metadata if provided
                 if metadata and i < len(metadata):
                     payload.update(metadata[i])
-                
+
                 points.append(
                     models.PointStruct(
                         id=point_id,
@@ -69,16 +84,16 @@ class EmbeddingService:
                         payload=payload
                     )
                 )
-            
+
             # Store embeddings in Qdrant
             self.qdrant_client.upsert(
                 collection_name=self.collection_name,
                 points=points
             )
-            
+
             logger.info(f"Stored {len(points)} embeddings in Qdrant")
             return ids
-            
+
         except Exception as e:
             logger.error(f"Error storing embeddings: {str(e)}")
             raise e
@@ -86,21 +101,35 @@ class EmbeddingService:
     def search_similar(self, query_text: str, limit: int = 5) -> List[Dict[str, Any]]:
         """Search for similar texts using the query text."""
         try:
+            if not self.is_connected:
+                logger.warning("Qdrant is not connected. Skipping similarity search.")
+                return []
+
+            # Check if the collection exists and has vectors before searching
+            try:
+                collection_info = self.qdrant_client.get_collection(self.collection_name)
+                if collection_info.points_count == 0:
+                    logger.warning(f"Qdrant collection '{self.collection_name}' exists but has no vectors")
+                    return []
+            except Exception as e:
+                logger.warning(f"Qdrant collection '{self.collection_name}' does not exist or is not accessible: {str(e)}")
+                return []
+
             # Generate embedding for the query
             query_embeddings = self.generate_embeddings([query_text])
             query_vector = query_embeddings[0] if query_embeddings else []
-            
+
             if not query_vector:
                 logger.warning("Could not generate embedding for query")
                 return []
-            
+
             # Search in Qdrant
             search_results = self.qdrant_client.search(
                 collection_name=self.collection_name,
                 query_vector=query_vector,
                 limit=limit,
             )
-            
+
             # Extract relevant information from results
             results = []
             for result in search_results:
@@ -110,10 +139,10 @@ class EmbeddingService:
                     "score": result.score,
                     "payload": result.payload
                 })
-            
+
             logger.info(f"Found {len(results)} similar texts for query")
             return results
-            
+
         except Exception as e:
             logger.error(f"Error searching for similar texts: {str(e)}")
             raise e
@@ -121,6 +150,10 @@ class EmbeddingService:
     def delete_embeddings(self, ids: List[str]):
         """Delete embeddings by their IDs."""
         try:
+            if not self.is_connected:
+                logger.warning("Qdrant is not connected. Skipping embedding deletion.")
+                return
+
             self.qdrant_client.delete(
                 collection_name=self.collection_name,
                 points_selector=models.PointIdsList(

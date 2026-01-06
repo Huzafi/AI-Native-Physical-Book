@@ -115,22 +115,32 @@ class BookContentService:
     def search_sections(self, query_text: str, limit: int = 5) -> List[dict]:
         """Search for relevant sections using vector similarity."""
         from src.config.cohere_config import generate_embeddings
-        
+
+        # Check if the collection exists and has vectors before searching
+        try:
+            collection_info = self.qdrant_client.get_collection(self.collection_name)
+            if collection_info.points_count == 0:
+                logger.warning(f"Qdrant collection '{self.collection_name}' exists but has no vectors")
+                return []
+        except Exception as e:
+            logger.warning(f"Qdrant collection '{self.collection_name}' does not exist or is not accessible: {str(e)}")
+            return []
+
         # Generate embedding for the query
         query_embeddings = generate_embeddings([query_text])
         query_vector = query_embeddings[0] if query_embeddings else []
-        
+
         if not query_vector:
             logger.warning("Could not generate embedding for query")
             return []
-        
+
         # Search in Qdrant
         search_results = self.qdrant_client.search(
             collection_name=self.collection_name,
             query_vector=query_vector,
             limit=limit,
         )
-        
+
         # Extract relevant information from results
         sections = []
         for result in search_results:
@@ -142,7 +152,7 @@ class BookContentService:
                 "page_end": result.payload.get("page_end"),
                 "score": result.score
             })
-        
+
         logger.info(f"Found {len(sections)} relevant sections for query")
         return sections
 

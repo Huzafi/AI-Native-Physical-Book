@@ -55,6 +55,15 @@ const config = {
     ],
   ],
 
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {
+        src: '//code.tidio.co/l6samdainznflbwy1u6anhnyvlq5tukc.js',
+        async: 'true',
+      },
+    },
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({

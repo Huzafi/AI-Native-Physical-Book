@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 import uuid
 
+# Use a single Base instance for all models
 Base = declarative_base()
 
 def generate_uuid():
