@@ -1,60 +1,80 @@
 """Database configuration and setup for the RAG Chatbot application."""
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
-from pydantic_settings import BaseSettings
 import os
+import logging
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from src.models import Base  # Import the Base from models module to ensure all models are registered
+
+# Load environment variables
+load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 
 class DatabaseSettings(BaseSettings):
-    database_url: str = os.getenv("NEON_DATABASE_URL", "postgresql+asyncpg://user:password@localhost/dbname")
-    async_database_url: str = os.getenv("NEON_DATABASE_URL", "postgresql+asyncpg://user:password@localhost/dbname")  # For async operations
+    """
+    Database settings.
+    Defaults to SQLite if no environment variable is provided.
+    """
+    database_url: str = os.getenv(
+        "NEON_DATABASE_URL",
+        "sqlite:///./rag_chatbot.db"
+    )
 
     class Config:
         env_file = ".env"
-        extra = "ignore"  # Ignore extra fields from .env that don't match class fields
+        extra = "ignore"
 
 
 # Create settings instance
 settings = DatabaseSettings()
 
-# Create sync engine and session factory
-sync_engine = create_engine(
-    settings.database_url.replace("+asyncpg", "") if "+asyncpg" in settings.database_url else settings.database_url,
-    echo=True,  # Set to True for SQL query logging
+# Detect database type
+using_postgres = settings.database_url.lower().startswith("postgresql")
+
+# Ensure sslmode for Neon PostgreSQL
+if using_postgres and "neon" in settings.database_url.lower():
+    if "sslmode" not in settings.database_url:
+        if "?" in settings.database_url:
+            settings.database_url += "&sslmode=require"
+        else:
+            settings.database_url += "?sslmode=require"
+
+
+# Create SQLAlchemy engine
+if using_postgres:
+    engine = create_engine(
+        settings.database_url,
+        echo=True,
+        pool_pre_ping=True,
+        pool_recycle=300,
+    )
+else:
+    # SQLite configuration
+    engine = create_engine(
+        settings.database_url,
+        echo=True,
+        connect_args={"check_same_thread": False},
+    )
+
+# Session factory
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
 )
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sync_engine)
-
-# Create async engine and session factory
-async_engine = create_async_engine(
-    settings.async_database_url,
-    echo=True,  # Set to True for SQL query logging
-)
-
-AsyncSessionLocal = sessionmaker(
-    bind=async_engine,
-    class_=AsyncSession,
-    expire_on_commit=False
-)
-
-# Base class for declarative models
-Base = declarative_base()
 
 
 def get_db():
-    """Dependency to get sync database session."""
+    """
+    Dependency to get a database session.
+    """
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
-
-
-async def get_async_session():
-    """Dependency to get async database session."""
-    async with AsyncSessionLocal() as session:
-        yield session
